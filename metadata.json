@@ -1,0 +1,6 @@
+{
+  "name": "County Campaign Manager",
+  "description": "A field training prototype for a fictional Nyeri county governor campaign with activities, tasks, community issues, and team operations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
