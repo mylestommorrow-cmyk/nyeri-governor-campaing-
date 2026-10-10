@@ -7,13 +7,15 @@ import { Badge } from './ui/badge';
 interface HeaderProps {
   onOpenTestingGuide: () => void;
   onOpenMobileSidebar: () => void;
+  onOpenSupabaseModal: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   onOpenTestingGuide,
   onOpenMobileSidebar,
+  onOpenSupabaseModal,
 }) => {
-  const { activePage, stats, resetAllData } = useCampaign();
+  const { activePage, stats, resetAllData, supabaseStatus } = useCampaign();
 
   const pageTitles: Record<string, { title: string; subtitle: string }> = {
     dashboard: {
@@ -92,10 +94,27 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Right: Quick actions */}
         <div className="flex items-center gap-2 shrink-0">
           <Button
+            variant="outline"
+            size="sm"
+            onClick={onOpenSupabaseModal}
+            className="text-xs h-8 px-2.5 bg-white border-zinc-200 hover:bg-zinc-50 flex items-center gap-1.5"
+            title="Supabase Database Settings"
+          >
+            <span className={`h-2 w-2 rounded-full ${
+              supabaseStatus === 'connected'
+                ? 'bg-emerald-500'
+                : supabaseStatus === 'needs_tables'
+                ? 'bg-amber-500'
+                : 'bg-zinc-400'
+            }`} />
+            <span className="font-semibold text-zinc-800">Supabase</span>
+          </Button>
+
+          <Button
             variant="yellow"
             size="sm"
             onClick={onOpenTestingGuide}
-            className="text-xs font-bold hidden sm:inline-flex items-center gap-1.5 shadow-xs"
+            className="text-xs font-bold hidden sm:inline-flex items-center gap-1.5 shadow-xs h-8"
           >
             <HelpCircle className="h-3.5 w-3.5" />
             <span>How To Test</span>

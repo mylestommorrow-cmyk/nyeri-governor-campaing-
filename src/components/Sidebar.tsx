@@ -19,16 +19,18 @@ import { Badge } from './ui/badge';
 
 interface SidebarProps {
   onOpenTestingGuide: () => void;
+  onOpenSupabaseModal?: () => void;
   mobileOpen?: boolean;
   onCloseMobile?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   onOpenTestingGuide,
+  onOpenSupabaseModal,
   mobileOpen = false,
   onCloseMobile,
 }) => {
-  const { activePage, setActivePage, stats, resetAllData } = useCampaign();
+  const { activePage, setActivePage, stats, resetAllData, supabaseStatus } = useCampaign();
 
   const navItems: { page: AppPage; label: string; icon: React.ReactNode; badge?: number; badgeColor?: string }[] = [
     {
@@ -185,6 +187,33 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Footer Controls in Sidebar */}
       <div className="p-4 border-t border-zinc-800 bg-zinc-950 space-y-2">
+        {/* Supabase Status Indicator */}
+        <button
+          onClick={() => {
+            if (onOpenSupabaseModal) onOpenSupabaseModal();
+            if (onCloseMobile) onCloseMobile();
+          }}
+          className="w-full p-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 flex items-center justify-between text-xs transition-colors cursor-pointer"
+        >
+          <div className="flex items-center gap-2">
+            <span className={`h-2.5 w-2.5 rounded-full ${
+              supabaseStatus === 'connected'
+                ? 'bg-emerald-400 ring-2 ring-emerald-400/30 animate-pulse'
+                : supabaseStatus === 'needs_tables'
+                ? 'bg-amber-400 ring-2 ring-amber-400/30'
+                : 'bg-zinc-500'
+            }`} />
+            <span className="font-semibold text-zinc-200">Supabase Cloud</span>
+          </div>
+          <span className="text-[10px] text-zinc-400 font-medium">
+            {supabaseStatus === 'connected'
+              ? 'Synced'
+              : supabaseStatus === 'needs_tables'
+              ? 'Setup SQL'
+              : 'Status'}
+          </span>
+        </button>
+
         <Button
           variant="yellow"
           size="sm"
